@@ -1,15 +1,14 @@
 package sample;
+import sample.device.OfficalDevice;
+import sample.permission.EmployeeRole;
+import sample.permission.OfficalDevicePermissionChecker;
 
-import sample.device.FaxMachine;
-import sample.device.Photocopier;
-import sample.device.Printer;
-
-public class Employee extends Person implements IEmployeeDevicePermission {
+public class Employee extends Person {
     private String degree;
-
 
     public Employee(String name) {
         super(name);
+        updateRole();
     }
 
     public Employee(String name, String address, String email, String phone, String degree) {
@@ -22,6 +21,18 @@ public class Employee extends Person implements IEmployeeDevicePermission {
         return "Employee{" +
                 "degree='" + degree + '\'' +
                 '}';
+    }
+
+    @Override
+    protected void updateRole() {
+        this.role = new EmployeeRole();
+    }
+
+    @Override
+    protected void sayThankyou() {
+
+        System.out.println("Thank you!");
+        System.out.println("===== Have a nice day! employee " + name + " (^_^) =====");
     }
 
     public void displayInformationWithDegreeToScreen() {
@@ -38,27 +49,15 @@ public class Employee extends Person implements IEmployeeDevicePermission {
         this.degree = degree;
     }
 
-
-
-
     @Override
-    public void useFaxMachine(FaxMachine d) {
-
-        d.setUsing(true);
-        System.out.println("Employee " + this.getName() + " is using a fax machine F"+d.getId());
+    public void useDevice(OfficalDevice device) throws Exception {
+        OfficalDevicePermissionChecker checker = new OfficalDevicePermissionChecker();
+        boolean isCanUse = checker.canUseDevice(this.getRole().getPermissionList(), device.getClass());
+        if (!isCanUse) {
+            throw new Exception("Bạn không thể truy cập thiết bị này");
+        }
+        device.setUsing(true);
+        System.out.println("=====Employee " + name + " is using " + device.getName() + device.getId() + "=====");
+        device.work(0);
     }
-
-    @Override
-    public void usePrinter(Printer d) {
-        d.setUsing(true);
-        System.out.println("Employee " + this.getName() + " is using a printer P"+ d.getId());
-    }
-
-    @Override
-    public void usePhotocopier(Photocopier d) {
-        d.setUsing(true);
-        System.out.println("Employee " + this.getName() + " is using a photocopier Ph"+d.getId());
-    }
-
-
 }

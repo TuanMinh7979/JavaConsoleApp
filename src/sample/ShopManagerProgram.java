@@ -69,14 +69,15 @@ public class ShopManagerProgram {
 
     public static void main(String[] args) {
         ShopManagerProgram shopManager = new ShopManagerProgram();
-        shopManager.setPrinterRs(new PrinterResource());
         shopManager.setPhotocopierRs(new PhotocopierResource());
         shopManager.setFaxMachineRs(new FaxMachineResource());
+        shopManager.setPrinterRs(new PrinterResource());
+
 
         Scanner scanner = new Scanner(System.in);
 
         // Nhập tên người dùng
-        System.out.print("Nhập tên của bạn: ");
+        System.out.print("Tôi có thể gọi bạn là: ");
         String name = scanner.nextLine();
         Person p = null;
 
@@ -87,7 +88,7 @@ public class ShopManagerProgram {
         int role = scanner.nextInt();
         boolean running = true;
         while (running) {
-            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
             switch (role) {
                 case 1:
                     System.out.println("___RESOURCE___");
@@ -95,6 +96,8 @@ public class ShopManagerProgram {
 
                     System.out.println("___Menu___");
                     System.out.println("1. Sử dụng máy photocopy");
+                    System.out.println("//2. Sử dụng máy fax");
+                    System.out.println("//3. Sử dụng máy in");
                     System.out.println("0. Thoát");
                     break;
                 case 2:
@@ -108,69 +111,44 @@ public class ShopManagerProgram {
                     System.out.println("0. Thoát");
                     break;
                 default:
-                    System.out.println("Lựa chọn không hợp lệ.");
-                    break;
+                    System.out.println("Lựa chọn không hợp lệ. Thoát chương trình.");
+                    return;
+
             }
 
             int taskId = scanner.nextInt();
+            System.out.println("");
+            System.out.println("");
 
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             switch (taskId) {
                 case 1:
+                case 2:
+                case 3:
                     try {
                         if (role == 1) {
                             p = new Customer(name);
-
-                            ((Customer) p).usePhotocopier((Photocopier) shopManager.allocate(taskId));
-                        } else {
+                            p.useDevice(shopManager.allocate(taskId));
+                        } else if (role == 2) {
                             p = new Employee(name);
-
-                            ((Employee) p).usePhotocopier((Photocopier) shopManager.allocate(taskId));
+                            p.useDevice(shopManager.allocate(taskId));
                         }
                     } catch (Exception e) {
-                        System.out.println("===== "+e.getMessage() + " Mời chọn lại =====");
+                        System.out.println("===== " + e.getMessage() + ". Mời chọn lại =====");
                         continue;
                     }
                     break;
-                case 2:
-                    try {
-                        if (role == 2) {
-                            p = new Employee(name);
-                            ((Employee) p).useFaxMachine((FaxMachine) shopManager.allocate(taskId));
-                        }
-                    } catch (Exception e) {
-                        System.out.println("===== " +e.getMessage() + " Mời chọn lại =====");
-                        continue;
-                    }
 
-                    break;
-                case 3:
-                    try {
-                        if (role == 2) {
-                            p = new Employee(name);
-                            ((Employee) p).usePrinter((Printer) shopManager.allocate(taskId));
-                        }
-                    } catch (Exception e) {
-                        System.out.println("===== "+e.getMessage() + " Mời chọn lại =====");
-                        continue;
-                    }
-                    break;
                 case 0:
                     running = false;
                     continue;
-
-
                 default:
-                    System.out.println("=====Lựa chọn không hợp lệ. Mời chọn lại");
-                    continue;
+                    System.out.println("=====Lựa chọn không hợp lệ. Mời chọn lại =====");
+
             }
         }
 
-        if (p instanceof Customer) {
-            System.out.println("=====Have a nice day! customer " + p.getName() + " (^_^) =====");
-        } else if (p instanceof Employee) {
-            System.out.println("=====Have a nice day! employee " + p.getName() + " (^_^) =====");
-        }
-
+        p.sayThankyou();
         scanner.close();
 
     }

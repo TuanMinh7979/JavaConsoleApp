@@ -1,13 +1,22 @@
 package sample;
 
+import sample.device.OfficalDevice;
 import sample.device.Photocopier;
+import sample.permission.CustomerRole;
+import sample.permission.OfficalDevicePermissionChecker;
 
-public class Customer extends Person implements ICustomerDevicePermission {
+import java.io.Serializable;
+
+public class Customer extends Person {
+
+
     private String type;
 
 
     public Customer(String name) {
         super(name);
+        updateRole();
+
     }
 
     public Customer(String name, String address, String email, String phone, String type) {
@@ -20,6 +29,17 @@ public class Customer extends Person implements ICustomerDevicePermission {
         return "Customer{" +
                 "type='" + type + '\'' +
                 '}';
+    }
+
+    @Override
+    protected void updateRole() {
+        this.role = new CustomerRole();
+    }
+
+    @Override
+    protected void sayThankyou() {
+        System.out.println("Thank you!");
+        System.out.println("===== Have a nice day! customer " + name + " (^_^) =====");
     }
 
 
@@ -38,11 +58,16 @@ public class Customer extends Person implements ICustomerDevicePermission {
     }
 
 
-
     @Override
-    public void usePhotocopier(Photocopier d) {
-        d.setUsing(true);
-        System.out.println("Customer " + this.getName() + " is using a photocopier Ph"+d.getId());
+    public void useDevice(OfficalDevice device) throws Exception {
+        OfficalDevicePermissionChecker checker = new OfficalDevicePermissionChecker();
+        boolean isCanUse = checker.canUseDevice(this.getRole().getPermissionList(), device.getClass());
+        if (!isCanUse) {
+            throw new Exception("Bạn không thể truy cập thiết bị này");
+        }
+        device.setUsing(true);
+        System.out.println("=====Customer " + name + " is using " + device.getName() + device.getId() + "=====");
+        device.work(0);
 
     }
 }

@@ -1,10 +1,18 @@
 package sample;
 
-public class Person {
-    private String name;
-    private String address;
-    private String email;
-    private String phone;
+import sample.device.OfficalDevice;
+import sample.permission.OfficalDevicePermissionChecker;
+import sample.permission.Permission;
+import sample.permission.Role;
+
+import java.util.List;
+
+public abstract class Person implements HumanOfficalBehavior {
+    protected String name;
+    protected String address;
+    protected String email;
+    protected String phone;
+    protected Role role;
 
     public Person() {
     }
@@ -68,5 +76,20 @@ public class Person {
         this.phone = phone;
     }
 
+    protected abstract void updateRole();
 
+    protected abstract void sayThankyou();
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    @Override
+    public void useDevice(OfficalDevice device) throws Exception {
+
+    }
 }

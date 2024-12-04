@@ -3,12 +3,13 @@ package sample.device;
 public class OfficalDevice {
     protected static int autoId = 1;
     protected int id;
-    protected boolean isUsing;
-    protected static String name;
+    public boolean isUsing;
+    protected String name;
 
-    public OfficalDevice() {
+    protected OfficalDevice() {
         this.id = autoId++;
     }
+
 
     public int getId() {
         return id;
@@ -18,11 +19,11 @@ public class OfficalDevice {
         return name;
     }
 
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         this.id = id;
     }
 
@@ -30,7 +31,14 @@ public class OfficalDevice {
     public boolean isUsing() {
         return isUsing;
     }
+
     public void setUsing(boolean using) {
         isUsing = using;
     }
+
+    public void work(int mode) {
+
+    }
+
+
 }

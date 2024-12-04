@@ -32,8 +32,6 @@ public class OfficalDeviceResourceImpl<T extends OfficalDevice> implements IDevi
     public void showAvailableList() {
         List<T> data = getAvailableItems();
         if (!data.isEmpty()) {
-            System.out.println("List " + data.get(0).getName());
-
             for (T item : data) {
                 System.out.print(data.get(0).getName().substring(0, 2) + item.getId() + ", ");
             }
