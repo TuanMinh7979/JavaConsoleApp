@@ -1,9 +1,12 @@
 package sample;
+
 import sample.device.OfficalDevice;
 import sample.permission.EmployeeRole;
+import sample.permission.IPermissionChecker;
 import sample.permission.OfficalDevicePermissionChecker;
 
 public class Employee extends Person {
+    private IPermissionChecker checker;
     private String degree;
 
     public Employee(String name) {
@@ -51,8 +54,8 @@ public class Employee extends Person {
 
     @Override
     public void useDevice(OfficalDevice device) throws Exception {
-        OfficalDevicePermissionChecker checker = new OfficalDevicePermissionChecker();
-        boolean isCanUse = checker.canUseDevice(this.getRole().getPermissionList(), device.getClass());
+        checker = new OfficalDevicePermissionChecker();
+        boolean isCanUse = checker.checkWithPermissionsAndClassName(this.getRole().getPermissionList(), device.getClass());
         if (!isCanUse) {
             throw new Exception("Bạn không thể truy cập thiết bị này");
         }

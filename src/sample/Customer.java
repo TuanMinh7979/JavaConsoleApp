@@ -3,15 +3,15 @@ package sample;
 import sample.device.OfficalDevice;
 import sample.device.Photocopier;
 import sample.permission.CustomerRole;
+import sample.permission.IPermissionChecker;
 import sample.permission.OfficalDevicePermissionChecker;
 
 import java.io.Serializable;
 
 public class Customer extends Person {
-
+    private IPermissionChecker checker;
 
     private String type;
-
 
     public Customer(String name) {
         super(name);
@@ -60,8 +60,8 @@ public class Customer extends Person {
 
     @Override
     public void useDevice(OfficalDevice device) throws Exception {
-        OfficalDevicePermissionChecker checker = new OfficalDevicePermissionChecker();
-        boolean isCanUse = checker.canUseDevice(this.getRole().getPermissionList(), device.getClass());
+        checker = new OfficalDevicePermissionChecker();
+        boolean isCanUse = checker.checkWithPermissionsAndClassName(this.getRole().getPermissionList(), device.getClass());
         if (!isCanUse) {
             throw new Exception("Bạn không thể truy cập thiết bị này");
         }
