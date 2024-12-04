@@ -87,7 +87,7 @@ public class ShopManagerProgram {
         int role = scanner.nextInt();
         boolean running = true;
         while (running) {
-
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             switch (role) {
                 case 1:
                     System.out.println("___RESOURCE___");
